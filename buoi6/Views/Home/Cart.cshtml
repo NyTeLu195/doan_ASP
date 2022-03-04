@@ -1,0 +1,99 @@
+﻿@model IEnumerable<buoi6.Models.Cart>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{ }
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">Shopping Cart</li>
+            </ol>
+        </div>
+        <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class="image">Item</td>
+                        <td class="description"></td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="cart_product">
+                                <a href=""><img src="~/images/cart/one.png" alt=""></a>
+                            </td>
+                            <td class="cart_description">
+                                <h4><a href=""> @Html.DisplayFor(modelItem => item.Product.Name)</a></h4>
+                                <p>@Html.DisplayNameFor(model => model.Product.SKU) @Html.DisplayFor(modelItem => item.Product.SKU)</p>
+                            </td>
+                            <td class="cart_price">
+                                <p>@Html.DisplayFor(modelItem => item.Product.Price) VNĐ</p>
+                            </td>
+                            <td class="cart_quantity">
+                                <div class="cart_quantity_button">
+                                    <a class="cart_quantity_up" asp-action="Add" asp-route-id="@item.ProductId"> + </a>
+                                    <input class="cart_quantity_input" type="text" name="quantity" value=@Html.DisplayFor(modelItem => item.Quantity) autocomplete="off" size="2">
+                                    <a class="cart_quantity_down" asp-action="Remove" asp-route-id="@item.ProductId"> - </a>
+                                </div>
+                            </td>
+                            <td class="cart_total">
+                                <p class="cart_total_price">@(item.Product.Price* item.Quantity) VNĐ</p>
+                            </td>
+                            <td class="cart_delete">
+                                <a class="cart_quantity_delete" asp-action="DeleteCart" asp-route-id="@item.Id"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    }
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section> <!--/#cart_items-->
+
+<section id="do_action">
+    <div class="container">
+        <div class="heading">
+            <h3>What would you like to do next?</h3>
+            <p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+        </div>
+        <div class="row">
+          
+            <div class="col-sm-6">
+                <div class="total_area">
+                    <ul>
+                        @{ 
+                            int subtotal = 0;
+                            foreach (var item in Model)
+                            {
+                                subtotal += item.Product.Price * item.Quantity;
+                            }
+                            int VAT = subtotal * 10 / 100;
+                            int total = subtotal + VAT;
+                        }
+                        
+
+            
+                        <li>Cart Sub Total <span> @subtotal VNĐ</span></li>
+                        <li>VAT <span>@VAT VNĐ </span></li>
+                        <li>Shipping Cost <span>Free</span></li>
+                        <li>Total <span>@total VNĐ</span></li>
+                    </ul>
+                    <a class="btn btn-default update" href="">Update</a>
+                    <a class="btn btn-default check_out" href="">Check Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!--/#do_action-->

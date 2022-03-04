@@ -1,0 +1,23 @@
+﻿@model IEnumerable<buoi6.Models.Invoice>
+
+@{ Layout = "_LayoutAdmin"; }
+<h1>Doanh thu theo thời gian</h1>
+
+<form asp-controller="Admin" asp-action="InvoiceTime" method="get">
+    <input type="date" name="Batdau" placeholder="Bắt đầu" />
+    <input type="date" name="Ketthuc" placeholder="Kết thúc" />
+    <button type="submit" class="btn btn-default">Lọc</button>
+</form>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <h3 class="tile-title">Monthly Sales</h3>
+            <div class="embed-responsive embed-responsive-16by9">
+                <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>

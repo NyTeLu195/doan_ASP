@@ -1,0 +1,55 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LayoutAdmin";
+}
+
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
+            <p>A free and open source Bootstrap 4 admin template</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-3" >
+            <a class="widget-small primary coloured-icon" asp-controller="Admin" asp-action="InvoiceWeek">
+                <i class="icon fa fa-users fa-3x" ></i>
+                <div class="info">
+                    <h4>Danh sách hóa đơn mới nhất trong tuần</h4>
+                    
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a class="widget-small info coloured-icon" asp-controller="Admin" asp-action="InvoiceTime">
+                <i class="icon fa fa-thumbs-o-up fa-3x"></i>
+                <div class="info">
+                    <h4>Danh sách hóa đơn theo thời gian</h4>
+                    
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small warning coloured-icon">
+                <i class="icon fa fa-files-o fa-3x"></i>
+                <div class="info">
+                    <h4>Uploades</h4>
+                    <p><b>10</b></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small danger coloured-icon">
+                <i class="icon fa fa-star fa-3x"></i>
+                <div class="info">
+                    <h4>Stars</h4>
+                    <p><b>500</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
