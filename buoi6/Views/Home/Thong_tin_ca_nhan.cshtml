@@ -1,0 +1,51 @@
+﻿@model buoi6.Models.Account
+
+@{
+
+}
+<section id="cart_items">
+    <div class="container">
+        <div class="shopper-informations">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="shopper-info">
+                        <h2>Avatar</h2>
+                        <form>
+                            <div>
+                                <a href=""><img src="~/images/cart/one.png" alt=""></a>
+                            </div>
+                        </form>
+                        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Back</a>
+                    </div>
+                </div>
+                <div class="col-sm-8 clearfix">
+                    <div class="bill-to">
+                        <h2>My Account</h2>
+                        <div class="form-one">
+                            <form>
+                               <p>Full Name</p> 
+                               <p>Username</p>
+                               <p>Email</p>
+                               <p>Phone</p>
+                               <p>Address</p>
+                            </form>
+                        </div>
+                        <div class="form-two">
+                            <form>
+                              <p>  @Html.DisplayFor(model => model.FullName) </p>
+                              <p>@Html.DisplayFor(model => model.Username)</p> 
+                              <p> @Html.DisplayFor(model => model.Email)</p>
+                              <p> @Html.DisplayFor(model => model.Phone)</p>
+                              <p>   @Html.DisplayFor(model => model.Address)</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+

@@ -196,5 +196,18 @@ namespace buoi6.Controllers
         {
             return _context.Invoice.Any(e => e.Id == id);
         }
+        [HttpPost, ActionName("Add_inv")]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> Add_inv(int total,string diachi, string sdt)
+        {
+            int accountid = Convert.ToInt32(HttpContext.Request.Cookies["AccountID"]);
+            DateTime now = DateTime.Now;
+            Invoice inv = new Invoice {Code =null,AccountId=accountid,IsuedDate=now,ShippingAddress=diachi,ShippingPhone=sdt,Total=total,Status=true};
+            _context.Add(inv);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Invode", "Home");
+        } 
     }
 }

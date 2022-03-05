@@ -3,6 +3,11 @@
 @{
     string method;
     string username;
+    int id=0;
+    if (ViewBag.AccountID != null)
+    {
+        id = Int32.Parse(ViewBag.AccountID);
+    }
     if (ViewBag.AccountUsername != null)
     {
         username = ViewBag.AccountUsername;
@@ -78,8 +83,7 @@
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><i class="fa fa-user"></i> @username</a></li>
-                            <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+                            <li><a asp-controller="Home" asp-action="Thong_tin_ca_nhan" asp-route-id=@id></i> @username</a></li>s
                             <li><a asp-controller="Home" asp-action="Checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                             <li><a asp-controller="Home" asp-action="Cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                             <li><a asp-controller="Accounts" asp-action=@method><i class="fa fa-lock"></i> @method</a></li>

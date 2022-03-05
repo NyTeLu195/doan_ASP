@@ -1,21 +1,25 @@
-﻿using buoi6.Data;
-using buoi6.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using buoi6.Data;
+using buoi6.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.Diagnostics;
 
 namespace buoi6.Controllers
 {
     public class HomeController : Controller
     {
-      
+
         private readonly EshopContext _context;
-        
+        private object _webHostEnvironment;
+
         public HomeController(EshopContext context)
         {
             _context = context;
@@ -26,6 +30,7 @@ namespace buoi6.Controllers
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
             }
             List<Product> products = _context.Product.Include(p => p.ProductType).ToList();
             List<ProductType> productType = _context.ProductType.ToList();
@@ -33,7 +38,7 @@ namespace buoi6.Controllers
             Home home = new Home();
             home.listProduct = products;
             home.listProductType = productType;
-            
+
             return View(home);
         }
         public IActionResult Blog()
@@ -42,6 +47,7 @@ namespace buoi6.Controllers
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
             }
             return View();
         }
@@ -50,6 +56,7 @@ namespace buoi6.Controllers
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
             }
             return View();
         }
@@ -58,6 +65,7 @@ namespace buoi6.Controllers
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
                 var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
@@ -92,13 +100,16 @@ namespace buoi6.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Cart));
         }
-        public IActionResult Checkout()
+        public async Task<IActionResult> CheckoutAsync()
         {
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+                var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(c => c.Account.Username == SessionKeyName());
+                return View(await eshopContext.ToListAsync());
             }
-            return View();
+            return RedirectToAction("Login", "Account");
         }
         public IActionResult Contact()
         {
@@ -197,6 +208,37 @@ namespace buoi6.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public async Task<IActionResult> Invoice()
+        {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                var eshopContext = _context.Invoice.Include(i => i.Account).Where(c => c.Account.Username == SessionKeyName());
+                return View(await eshopContext.ToListAsync());
+            }
+            return RedirectToAction("Login", "Account");
+        }
+        public async Task<IActionResult> Thong_tin_ca_nhan(int? id)
+        {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return View(account);
         }
     }
 }
