@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
 
 namespace buoi6.Controllers
 {
@@ -18,11 +19,12 @@ namespace buoi6.Controllers
     {
 
         private readonly EshopContext _context;
-        private object _webHostEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(EshopContext context)
+        public HomeController(EshopContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -69,7 +71,7 @@ namespace buoi6.Controllers
                 var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Accounts");
         }
         public async Task<IActionResult> DeleteCart(int? id)
         {
@@ -109,7 +111,7 @@ namespace buoi6.Controllers
                 var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Accounts");
         }
         public IActionResult Contact()
         {
@@ -131,6 +133,81 @@ namespace buoi6.Controllers
             }
 
             return View(product);
+        }
+        private bool AccountExists(int id)
+        {
+            return _context.Account.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> EditAccount(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account.FindAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return View(account);
+        }
+
+        // POST: Accounts/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAccount(int id, [Bind("Id,Username,Password,Email,Phone,Address,FullName,IsAdmin,Avatar,ImageFile,TrangThai")] Account account)
+        {
+            if (id != account.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(account);
+                    await _context.SaveChangesAsync();
+                    if (account.ImageFile != null)
+                    {
+                        var filename = account.Id.ToString() + Path.GetExtension(account.ImageFile.FileName);
+                        var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "img", "account");
+                        var filePath = Path.Combine(uploadPath, filename);
+                        using (FileStream fs = System.IO.File.Create(filePath))
+                        {
+                            account.ImageFile.CopyTo(fs);
+                            fs.Flush();
+                        }
+                        account.Avatar = filename;
+                        _context.Account.Update(account);
+                        await _context.SaveChangesAsync();
+               
+                    
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AccountExists(account.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                CookieOptions cookieOptions = new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddDays(7)
+                };
+                HttpContext.Response.Cookies.Append("AccountFullname", "", new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
+                HttpContext.Response.Cookies.Append("AccountFullname", account.FullName.ToString());
+                return RedirectToAction("Profile");
+            }
+            return View(account);
         }
         public IActionResult Product()
         {
@@ -217,28 +294,42 @@ namespace buoi6.Controllers
                 var eshopContext = _context.Invoice.Include(i => i.Account).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Accounts");
         }
-        public async Task<IActionResult> Thong_tin_ca_nhan(int? id)
+        public async Task<IActionResult> InvoiceDetail(int id)
         {
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                var eshopContext = _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product).Where(i=>i.InvoiceId==id);
+                return View(await eshopContext.ToListAsync());
+            }
+            return RedirectToAction("Login", "Accounts");
+        }
+        public async Task<IActionResult> Profile()
+        {
+            var id = -1;
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
+                id = Int32.Parse(ViewBag.AccountID);
 
-            var account = await _context.Account
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
+                if (id == -1)
+                {
+                    return NotFound();
+                }
 
-            return View(account);
+                var account = await _context.Account
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (account == null)
+                {
+                    return NotFound();
+                }
+
+                return View(account);
+            }
+            return RedirectToAction("Login", "Accounts");
         }
     }
 }

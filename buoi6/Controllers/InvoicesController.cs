@@ -207,7 +207,24 @@ namespace buoi6.Controllers
             _context.Add(inv);
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Invode", "Home");
+
+            int invoiceID = inv.Id;
+
+            var listcart = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(i=>i.AccountId==accountid);
+            List<InvoiceDetails> lstInvDetail = new List<InvoiceDetails>();
+            foreach (var item in listcart)
+            {
+                InvoiceDetails invDetail = new InvoiceDetails();
+                invDetail.InvoiceId = invoiceID;
+                invDetail.ProductId = item.ProductId;
+                invDetail.Quantity = item.Quantity;
+                invDetail.UnitPrice = item.Product.Price;
+                lstInvDetail.Add(invDetail);
+            }
+
+            _context.InvoiceDetails.AddRange(lstInvDetail);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Invoice", "Home");
         } 
     }
 }

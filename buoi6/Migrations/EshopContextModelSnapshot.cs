@@ -58,6 +58,27 @@ namespace buoi6.Migrations
                     b.ToTable("Account");
                 });
 
+            modelBuilder.Entity("buoi6.Models.Banner", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Des")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Img_banner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title_banner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Banner");
+                });
+
             modelBuilder.Entity("buoi6.Models.Cart", b =>
                 {
                     b.Property<int>("Id")

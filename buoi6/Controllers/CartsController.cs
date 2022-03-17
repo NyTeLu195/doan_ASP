@@ -21,7 +21,14 @@ namespace buoi6.Controllers
 
         // GET: Carts
         public async Task<IActionResult> Index()
+
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product);
             return View(await eshopContext.ToListAsync());
         }
@@ -29,6 +36,12 @@ namespace buoi6.Controllers
         // GET: Carts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -49,6 +62,12 @@ namespace buoi6.Controllers
         // GET: Carts/Create
         public IActionResult Create()
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             ViewData["AccountId"] = new SelectList(_context.Account, "Id", "Id");
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Id");
             return View();
@@ -75,6 +94,12 @@ namespace buoi6.Controllers
         // GET: Carts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -130,6 +155,12 @@ namespace buoi6.Controllers
         // GET: Carts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             if (id == null)
             {
                 return NotFound();

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<buoi6.Models.InvoiceDetails>
+
+@{
+
+}
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <div>
+                <a class="btn btn-primary" asp-controller="Home" asp-action="Invoice">Back</a>
+            </div><br /><br />
+        </div>
+        <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class="image">Item</td>
+                        <td class="description"></td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td class="cart_product">
+                            <a href=""><img src="~/images/cart/one.png" alt=""></a>
+                        </td>
+                        <td class="cart_description">
+                            <h4><a href=""> @Html.DisplayFor(modelItem => item.Product.Name)</a></h4>
+                            <p>@Html.DisplayNameFor(model => model.Product.SKU) @Html.DisplayFor(modelItem => item.Product.SKU)</p>
+                        </td>
+                        <td class="cart_price">
+                            <p>@Html.DisplayFor(modelItem => item.Product.Price) VNĐ</p>
+                        </td>
+                        <td class="cart_quantity">
+                            <div class="cart_quantity_button">
+
+                                <input class="cart_quantity_input" type="text" name="quantity" value=@Html.DisplayFor(modelItem => item.Quantity) autocomplete="off" size="2">
+
+                            </div>
+                        </td>
+                        <td class="cart_total">
+                            <p class="cart_total_price">@(item.UnitPrice* item.Quantity) VNĐ</p>
+                        </td>
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+           
+        </div>
+    </div>
+</section>

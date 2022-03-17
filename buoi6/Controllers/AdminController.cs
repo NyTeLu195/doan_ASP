@@ -18,6 +18,13 @@ namespace buoi6.Controllers
         }
         public IActionResult Index()
         {
+
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             return View();
         }
         public async Task<IActionResult> InvoiceWeekAsync()

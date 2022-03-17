@@ -1,109 +1,137 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Http;
+@{
+   
+    string username="";
+    string imageAvt="";
+    int id = 0;
+    if (ViewBag.AccountID != null)
+    {
+        id = Int32.Parse(ViewBag.AccountID);
+    }
+    if (ViewBag.AccountUsername != null)
+    {
+        username = ViewBag.AccountUsername;
+       
+    }
+    if (ViewBag.AccountImage != null)
+    {
+        imageAvt = ViewBag.AccountImage;
+       
+    }
+    else
+    {
+        
 
-<head>
-    <meta name="description"
-          content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
-    <!-- Twitter meta-->
-    <meta property="twitter:card" content="summary_large_image">
-    <!-- Open Graph Meta-->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Vali Admin">
-    <meta property="og:title" content="Vali - Free Bootstrap 4 admin theme">
-    <meta property="og:url" content="http://pratikborsadiya.in/blog/vali-admin">
-    <meta property="og:image" content="http://pratikborsadiya.in/blog/vali-admin/hero-social.png">
-    <meta property="og:description"
-          content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
-    <title>Vali Admin</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="~/css/admin/main.css">
-    <!-- Font-icon css-->
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
+        imageAvt = "";
+    }
+}
 
-<body class="app sidebar-mini rtl">
-    <!-- Navbar-->
-    <header class="app-header">
-        <a class="app-header__logo" href="index.html">Vali</a>
-        <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
-                                        aria-label="Hide Sidebar"></a>
-        <!-- Navbar Right Menu-->
-        <ul class="app-nav">
-            <li class="app-search">
-                <input class="app-search__input" type="search" placeholder="Search">
-                <button class="app-search__button"><i class="fa fa-search"></i></button>
-            </li>
-           
-            <!-- User Menu-->
-            <li >
-                <a class="app-nav__item"  asp-area="" asp-controller="Accounts" asp-action="Logout">
-                    Logout
-                </a>
-                
+<!DOCTYPE html>
+            <html lang="en">
 
-            </li>
-        </ul>
-    </header>
-    <!-- Sidebar menu-->
-    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-    <aside class="app-sidebar">
-        <div class="app-sidebar__user">
-            <img class="app-sidebar__user-avatar"
-                 src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="User Image">
-            <div>
-                <p class="app-sidebar__user-name">John Doe</p>
-                <p class="app-sidebar__user-designation">Frontend Developer</p>
-            </div>
-        </div>
-        <ul class="app-menu">
-            <li>
-                <a class="app-menu__item active" asp-controller="Admin" asp-action="Index">
-                    <i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item " asp-controller="Accounts" asp-action="Index">
-                    <i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Tài Khoản</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item" asp-controller="Products" asp-action="Index">
-                    <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Sản Phẩm</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item" asp-controller="ProductTypes" asp-action="Index">
-                    <i class="app-menu__icon fa fa-file-text"></i><span class="app-menu__label">Loại Sản Phẩm</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item" asp-controller="Invoices" asp-action="Index">
-                    <i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Hóa Đơn</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item" asp-controller="InvoiceDetails" asp-action="Index">
-                    <i class="app-menu__icon fa fa-pie-chart"></i><span class="app-menu__label">Chi Tiết Hóa Đơn</span>
-                </a>
-            </li>
-        </ul>
-    </aside>
-    <main class="app-content">
-        @RenderBody()
-    </main>
+            <head>
+                <meta name="description"
+                      content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
+                <!-- Twitter meta-->
+                <meta property="twitter:card" content="summary_large_image">
+                <!-- Open Graph Meta-->
+                <meta property="og:type" content="website">
+                <meta property="og:site_name" content="Vali Admin">
+                <meta property="og:title" content="Vali - Free Bootstrap 4 admin theme">
+                <meta property="og:url" content="http://pratikborsadiya.in/blog/vali-admin">
+                <meta property="og:image" content="http://pratikborsadiya.in/blog/vali-admin/hero-social.png">
+                <meta property="og:description"
+                      content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
+                <title>Vali Admin</title>
+                <meta charset="utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <!-- Main CSS-->
+                <link rel="stylesheet" type="text/css" href="~/css/admin/main.css">
+                <!-- Font-icon css-->
+                <link rel="stylesheet" type="text/css"
+                      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            </head>
 
-    <!-- Essential javascripts for application to work-->
-    <script src="~/js/jsAdmin/bootstrap.min.js" ></script>
-    <script src="~/js/jsAdmin/jquery-3.2.1.min.js" ></script>
-    <script src="~/js/jsAdmin/main.js" ></script>
-    <script src="~/js/jsAdmin/popper.min.js" ></script>
-    <!-- The javascript plugin to display page loading on top-->
-    <script src="~/js/plugins/pace.min.js"></script>
-</body>
+            <body class="app sidebar-mini rtl">
+                <!-- Navbar-->
+                <header class="app-header">
+                    <a class="app-header__logo" href="index.html">Vali</a>
+                    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                                    aria-label="Hide Sidebar"></a>
+                    <!-- Navbar Right Menu-->
+                    <ul class="app-nav">
+                        <li class="app-search">
+                            <input class="app-search__input" type="search" placeholder="Search">
+                            <button class="app-search__button"><i class="fa fa-search"></i></button>
+                        </li>
 
-<!-- Page specific javascripts-->
-</html>
+                        <!-- User Menu-->
+                        <li>
+                            <a class="app-nav__item" asp-area="" asp-controller="Accounts" asp-action="Logout">
+                                Logout
+                            </a>
+
+
+                        </li>
+                    </ul>
+                </header>
+                <!-- Sidebar menu-->
+                <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+                <aside class="app-sidebar">
+                    <div class="app-sidebar__user">
+                        <img class="app-sidebar__user-avatar" style="width: 21%;"
+                             src="~/img/account/@imageAvt" alt="User Image">
+                        <div>
+                            <p class="app-sidebar__user-name">   @username </p>
+
+                        </div>
+                    </div>
+                    <ul class="app-menu">
+                        <li>
+                            <a class="app-menu__item active" asp-controller="Admin" asp-action="Index">
+                                <i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="app-menu__item " asp-controller="Accounts" asp-action="Index">
+                                <i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Tài Khoản</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="app-menu__item" asp-controller="Products" asp-action="Index">
+                                <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Sản Phẩm</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="app-menu__item" asp-controller="ProductTypes" asp-action="Index">
+                                <i class="app-menu__icon fa fa-file-text"></i><span class="app-menu__label">Loại Sản Phẩm</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="app-menu__item" asp-controller="Invoices" asp-action="Index">
+                                <i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Hóa Đơn</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="app-menu__item" asp-controller="InvoiceDetails" asp-action="Index">
+                                <i class="app-menu__icon fa fa-pie-chart"></i><span class="app-menu__label">Chi Tiết Hóa Đơn</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+                <main class="app-content">
+                    @RenderBody()
+                </main>
+
+                <!-- Essential javascripts for application to work-->
+                <script src="~/js/jsAdmin/bootstrap.min.js"></script>
+                <script src="~/js/jsAdmin/jquery-3.2.1.min.js"></script>
+                <script src="~/js/jsAdmin/main.js"></script>
+                <script src="~/js/jsAdmin/popper.min.js"></script>
+                <!-- The javascript plugin to display page loading on top-->
+                <script src="~/js/plugins/pace.min.js"></script>
+            </body>
+
+            <!-- Page specific javascripts-->
+        </html>

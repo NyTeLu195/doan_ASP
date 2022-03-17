@@ -18,7 +18,6 @@ namespace buoi6.Data
         public DbSet<ProductType> ProductType { get; set; }
         public DbSet<Invoice> Invoice { get; set; }
         public DbSet<InvoiceDetails> InvoiceDetails { get; set; }
-        public DbSet<Cart> Cart { get; set; }
-    }
+        public DbSet<Cart> Cart { get; set; }       }
     
 }

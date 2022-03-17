@@ -17,8 +17,7 @@ namespace buoi6.Controllers
     {
         private readonly EshopContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AccountsController(EshopContext context, IWebHostEnvironment webHostEnvironment
-)
+        public AccountsController(EshopContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
@@ -27,6 +26,12 @@ namespace buoi6.Controllers
         // GET: Accounts
         public async Task<IActionResult> Index(string Username, string Email, string Phonenumber, string Address, string Fullname)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             var search = (from s in _context.Account
                          select s);
             if (!String.IsNullOrEmpty(Username))
@@ -53,6 +58,12 @@ namespace buoi6.Controllers
         }
         public async Task<IActionResult> ByAddress()
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             var byAddress = (from acc in _context.Account
                              where acc.Address.Contains("Tp.Hồ Chí Minh")
                              select acc);
@@ -61,6 +72,12 @@ namespace buoi6.Controllers
         }
         public async Task<IActionResult> ByEmail()
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             var byEmail = (from acc in _context.Account
                              where acc.Email.Contains("Gmail")
                              select acc);
@@ -70,6 +87,12 @@ namespace buoi6.Controllers
         // GET: Accounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -88,6 +111,13 @@ namespace buoi6.Controllers
         // GET: Accounts/Create
         public IActionResult Create()
         {
+
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             return View();
         }
 
@@ -96,7 +126,7 @@ namespace buoi6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Username,Password,Email,Phone,Address,FullName,ImageFile,IsAdmin,Avatar,TrangThai")] Account account)
+        public async Task<IActionResult> Create([Bind("Id,Username,Password,Email,Phone,Address,FullName,IsAdmin,Avatar,ImageFile,TrangThai")] Account account)
         {
             if (ModelState.IsValid)
             {
@@ -127,6 +157,12 @@ namespace buoi6.Controllers
         // GET: Accounts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -192,6 +228,12 @@ namespace buoi6.Controllers
         // GET: Accounts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -238,7 +280,7 @@ namespace buoi6.Controllers
                     HttpContext.Response.Cookies.Append("AccountID", account.Id.ToString());
                     HttpContext.Response.Cookies.Append("AccountUsername", account.Username.ToString());
                     HttpContext.Response.Cookies.Append("AccountFullname", account.FullName.ToString());
-                   
+                    HttpContext.Response.Cookies.Append("AccountImage", account.Avatar.ToString());
 
                     if ( account.IsAdmin)
                     {
@@ -278,6 +320,7 @@ namespace buoi6.Controllers
 
             HttpContext.Response.Cookies.Append("AccountUsername", "", new CookieOptions { Expires = DateTime.Now.AddDays(-1) }); 
             HttpContext.Response.Cookies.Append("AccountFullname", "", new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
+            HttpContext.Response.Cookies.Append("AccountImage", "", new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
             return RedirectToAction("Index", "Home");
         }
         [HttpPost, ActionName("Resignter")]
@@ -290,7 +333,8 @@ namespace buoi6.Controllers
              _context.Add(user);
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return Login(username, password);
+            
         }
 
     }

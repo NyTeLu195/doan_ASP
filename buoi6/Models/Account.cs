@@ -31,9 +31,7 @@ namespace buoi6.Models
         public string Avatar { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
-
-
-        [DisplayName("Trang thái")]
+        [DisplayName("Trang thái")] 
         public bool TrangThai { get; set; }
         [ForeignKey("AccountId")]
         public List<Invoice> Invoices { get; set; }

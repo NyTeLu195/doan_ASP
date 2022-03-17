@@ -5,21 +5,12 @@
 }
 <section id="cart_items">
     <div class="container">
-        <div class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li class="active">Shopping Cart</li>
-            </ol>
-        </div>
+       
         <div class="table-responsive cart_info">
             <table class="table table-condensed">
                 <thead>
                     <tr class="cart_menu">
-                        <td>Image</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="price">ID</td>
                         <td class="price">IsuedDate</td>
                         <td class="quantity">ShippingAddress</td>
                         <td class="quantity">ShippingPhone</td>
@@ -30,34 +21,31 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td class="cart_product">
-                            <a href=""><img src="~/images/cart/one.png" alt=""></a>
+                    <tr>   
+                        <td class="cart_price">
+                            <p>@Html.DisplayFor(modelItem => item.Id)</p>
                         </td>
-                        <td>   </td>
-                        <td></td>
-                        <td>   </td>
-                        <td></td>
                         <td class="cart_price">
                             <p>@Html.DisplayFor(modelItem => item.IsuedDate)</p>
                         </td>
                         <td class="cart_quantity">
                             <div class="cart_quantity_button">
-                                <p> @Html.DisplayNameFor(model => model.ShippingAddress)</p>
+                                <p> @Html.DisplayFor(modelItem => item.ShippingAddress)</p>
                             </div>
                         </td>
                         <td class="cart_quantity">
-                            <p> @Html.DisplayNameFor(model => model.ShippingPhone)</p>
+                            <p>@Html.DisplayFor(modelItem => item.ShippingPhone)</p>
                         </td>
                         <td class="cart_total">
                             <p class="cart_total_price"> @item.Total  VND</p>
                         </td>
                         <td class="cart_delete">
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-action="InvoiceDetail" asp-route-id="@item.Id">Details</a>
                         </td>
                     </tr>
                     }
                 </tbody>
+
             </table>
         </div>
     </div>

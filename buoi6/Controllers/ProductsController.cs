@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using buoi6.Data;
 using buoi6.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace buoi6.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly EshopContext _context;
-
-        public ProductsController(EshopContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductsController(EshopContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Products
@@ -96,12 +99,27 @@ namespace buoi6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SKU,Name,Deccription,Price,Stock,ProductTypeId,Image,Status")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,SKU,Name,Deccription,Price,Stock,ProductTypeId,Image,ImageFile,Status")] Product product)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+
+                if (product.ImageFile != null)
+                {
+                    var filename = product.Id.ToString() + Path.GetExtension(product.ImageFile.FileName);
+                    var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "img", "product");
+                    var filePath = Path.Combine(uploadPath, filename);
+                    using (FileStream fs = System.IO.File.Create(filePath))
+                    {
+                        product.ImageFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                    product.Image = filename;
+                    _context.Product.Update(product);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "Id", "Id", product.ProductTypeId);
@@ -130,7 +148,7 @@ namespace buoi6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SKU,Name,Deccription,Price,Stock,ProductTypeId,Image,Status")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SKU,Name,Deccription,Price,Stock,ProductTypeId,Image,ImageFile,Status")] Product product)
         {
             if (id != product.Id)
             {
@@ -143,6 +161,20 @@ namespace buoi6.Controllers
                 {
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+                    if (product.ImageFile != null)
+                    {
+                        var filename = product.Id.ToString() + Path.GetExtension(product.ImageFile.FileName);
+                        var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "img", "product");
+                        var filePath = Path.Combine(uploadPath, filename);
+                        using (FileStream fs = System.IO.File.Create(filePath))
+                        {
+                            product.ImageFile.CopyTo(fs);
+                            fs.Flush();
+                        }
+                        product.Image = filename;
+                        _context.Product.Update(product);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
