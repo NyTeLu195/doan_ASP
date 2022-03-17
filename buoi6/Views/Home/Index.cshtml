@@ -71,6 +71,10 @@
 <section>
     <div class="container">
         <div class="row">
+            <div>
+                <a class="btn btn-primary" asp-controller="Home" asp-action="Search">Tìm kiếm</a>
+                <a class="btn btn-primary" asp-controller="Home" asp-action="Search_Advanced">Tìm kiếm nâng cao</a>
+            </div>
             <div class="col-sm-12 padding-right">
                 <div class="features_items">
                     <!--features_items-->
@@ -115,53 +119,53 @@
                                 {
                                     if (i == 0)
                                     {
-                                                    <li class="active"><a href="#@Type.Id" data-toggle="tab">@Type.Name</a></li>
+                                        <li class="active"><a href="#@Type.Id" data-toggle="tab">@Type.Name</a></li>
                                     }
                                     else
                                     {
-                                                    <li><a href="#@Type.Id" data-toggle="tab">@Type.Name</a></li>
+                                        <li><a href="#@Type.Id" data-toggle="tab">@Type.Name</a></li>
                                     }
                                     i++;
                                 } }
 
-                         
+
                         </ul>
                     </div>
                     <div class="tab-content">
-                        @{  i = 0;
+                        @{ i = 0;
                             string active = "active in";
                             foreach (var Type in Model.listProductType)
                             {
                                 if (i != 0) { active = null; }
-                                                            <div class="tab-pane fade @active" id="@Type.Id">
-                                                @foreach (var items in Model.listProduct)
-                                                {
-                                                    if (items.ProductTypeId == Type.Id)
-                                                    {
-                                                <div class="col-sm-3">
-                                                    <div class="product-image-wrapper">
-                                                        <div class="single-products">
-                                                            <div class="productinfo text-center">
-                                                                <img src="~/img/product/@items.Image" alt="" height="250" width="200" />
-                                                                <h2>@Html.DisplayFor(modelItem => items.Price) VNĐ</h2>
-                                                                <p>@Html.DisplayFor(modelItem => items.Name)</p>
-                                                                <a asp-action="AddinHome" asp-route-id="@items.Id" class="btn btn-default add-to-cart">
-                                                                    <i class="fa fa-shopping-cart"></i>Add to cart
-                                                                </a>
-                                                                <a asp-action="Product_Detail" asp-route-id="@items.Id" class="btn btn-default add-to-cart">
-                                                                    <i class="fa fa fa-eye"></i>View Detail
-                                                                </a>
-                                                            </div>
-
+                                <div class="tab-pane fade @active" id="@Type.Id">
+                                    @foreach (var items in Model.listProduct)
+                                    {
+                                        if (items.ProductTypeId == Type.Id)
+                                        {
+                                            <div class="col-sm-3">
+                                                <div class="product-image-wrapper">
+                                                    <div class="single-products">
+                                                        <div class="productinfo text-center">
+                                                            <img src="~/img/product/@items.Image" alt="" height="250" width="200" />
+                                                            <h2>@Html.DisplayFor(modelItem => items.Price) VNĐ</h2>
+                                                            <p>@Html.DisplayFor(modelItem => items.Name)</p>
+                                                            <a asp-action="AddinHome" asp-route-id="@items.Id" class="btn btn-default add-to-cart">
+                                                                <i class="fa fa-shopping-cart"></i>Add to cart
+                                                            </a>
+                                                            <a asp-action="Product_Detail" asp-route-id="@items.Id" class="btn btn-default add-to-cart">
+                                                                <i class="fa fa fa-eye"></i>View Detail
+                                                            </a>
                                                         </div>
+
                                                     </div>
                                                 </div>
-                                                    }
-                                                }
-                                                    
-                                                
-
                                             </div>
+                                        }
+                                    }
+
+
+
+                                </div>
                                 i++;
                             } }
 
@@ -212,38 +216,38 @@
 
 
                             </div>
-                                <div class="item">
-                                    @{
-                                        dem = 0;
+                            <div class="item">
+                                @{
+                                    dem = 0;
 
-                                        var item = Model.listProduct;
-                                        i = 3;
-                                        for (i = 3; i < 6; i++)
-                                        {
-                                            <div class="col-sm-4">
-                                                <div class="product-image-wrapper">
-                                                    <div class="single-products">
-                                                        <div class="productinfo text-center">
-                                                            <img src="~/img/product/@item[i].Image" alt="" />
-                                                            <h2>@Html.DisplayFor(modelItem => item[i].Price) VNĐ</h2>
-                                                            <p>@Html.DisplayFor(modelItem => item[i].Name)</p>
-                                                            <a asp-action="AddinHome" asp-route-id="@item[i].Id" class="btn btn-default add-to-cart">
-                                                                <i class="fa fa-shopping-cart"></i>Add to cart
-                                                            </a>
-                                                            <a asp-action="Product_Detail" asp-route-id="@item[i].Id" class="btn btn-default add-to-cart">
-                                                                <i class="fa fa fa-eye"></i>View Detail
-                                                            </a>
-                                                        </div>
-
+                                    var item = Model.listProduct;
+                                    i = 3;
+                                    for (i = 3; i < 6; i++)
+                                    {
+                                        <div class="col-sm-4">
+                                            <div class="product-image-wrapper">
+                                                <div class="single-products">
+                                                    <div class="productinfo text-center">
+                                                        <img src="~/img/product/@item[i].Image" alt="" />
+                                                        <h2>@Html.DisplayFor(modelItem => item[i].Price) VNĐ</h2>
+                                                        <p>@Html.DisplayFor(modelItem => item[i].Name)</p>
+                                                        <a asp-action="AddinHome" asp-route-id="@item[i].Id" class="btn btn-default add-to-cart">
+                                                            <i class="fa fa-shopping-cart"></i>Add to cart
+                                                        </a>
+                                                        <a asp-action="Product_Detail" asp-route-id="@item[i].Id" class="btn btn-default add-to-cart">
+                                                            <i class="fa fa fa-eye"></i>View Detail
+                                                        </a>
                                                     </div>
+
                                                 </div>
                                             </div>
+                                        </div>
 
 
-                                        }
                                     }
-                                </div>
+                                }
                             </div>
+                        </div>
                         <a class="left recommended-item-control" href="#recommended-item-carousel"
                            data-slide="prev">
                             <i class="fa fa-angle-left"></i>

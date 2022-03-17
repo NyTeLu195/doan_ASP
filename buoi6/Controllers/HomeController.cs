@@ -32,6 +32,7 @@ namespace buoi6.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
@@ -52,6 +53,43 @@ namespace buoi6.Controllers
             home.listProductType = productType;
 
             return View(home);
+        }
+        public async Task<IActionResult> Search_Advanced(string SKU, string ProductName, string Decription, string Price_min, string Price_max, string type)
+        {
+            var search = (from i in _context.Product.Include(p => p.ProductType)
+                          select i);
+            if (!String.IsNullOrEmpty(SKU))
+            {
+                search = search.Where(s => s.SKU.Contains(SKU));
+            }
+            if (!String.IsNullOrEmpty(ProductName))
+            {
+                search = search.Where(s => s.Name.Contains(ProductName));
+            }
+            if (!String.IsNullOrEmpty(Decription))
+            {
+                search = search.Where(s => s.Deccription.Contains(Decription));
+            }
+            if (!String.IsNullOrEmpty(Price_min)&&!String.IsNullOrEmpty(Price_max))
+            {
+                if(Convert.ToInt32(Price_max)>=Convert.ToInt32(Price_min))
+                search = search.Where(s => s.Price >= Convert.ToInt32(Price_min)&&s.Price<=Convert.ToInt32(Price_max));
+            }
+            if (!String.IsNullOrEmpty(type))
+            {
+                search = search.Where(s => s.ProductType.Name.Contains(type));
+            }
+            return View(await search.ToListAsync());
+        }
+        public async Task<IActionResult> Search(string ProductName)
+        {
+            var search = (from i in _context.Product.Include(p => p.ProductType)
+                          select i);
+            if (!String.IsNullOrEmpty(ProductName))
+            {
+                search = search.Where(s => s.Name.Contains(ProductName));
+            }
+            return View(await search.ToListAsync());
         }
         public IActionResult Blog()
 
