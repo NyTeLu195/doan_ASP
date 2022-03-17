@@ -25,6 +25,9 @@ namespace buoi6.Controllers
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+          
+              
+           
         }
 
         public async Task<IActionResult> Index()
@@ -33,9 +36,16 @@ namespace buoi6.Controllers
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+              
+                int id = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a =>a.Id==id ).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
             }
             List<Product> products = _context.Product.Include(p => p.ProductType).ToList();
             List<ProductType> productType = _context.ProductType.ToList();
+
+
 
             Home home = new Home();
             home.listProduct = products;
@@ -50,6 +60,10 @@ namespace buoi6.Controllers
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+                int id = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
             }
             return View();
         }
@@ -68,6 +82,10 @@ namespace buoi6.Controllers
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+                int id = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
                 var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
@@ -108,6 +126,10 @@ namespace buoi6.Controllers
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+                int id = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
                 var eshopContext = _context.Cart.Include(c => c.Account).Include(c => c.Product).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
@@ -119,6 +141,16 @@ namespace buoi6.Controllers
         }
         public async Task<IActionResult> Product_Detail(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+
+                int AccountID = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == AccountID).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -140,6 +172,16 @@ namespace buoi6.Controllers
         }
         public async Task<IActionResult> EditAccount(int? id)
         {
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+
+                int AccountID = Int32.Parse(ViewBag.AccountID);
+                Account accountadmin = _context.Account.Where(a => a.Id == id).FirstOrDefault();
+
+                if (accountadmin.IsAdmin) return RedirectToAction("Index", "Admin");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -291,6 +333,16 @@ namespace buoi6.Controllers
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+
+                int id = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
+            }
+            if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
+            {
+                ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 var eshopContext = _context.Invoice.Include(i => i.Account).Where(c => c.Account.Username == SessionKeyName());
                 return View(await eshopContext.ToListAsync());
             }
@@ -298,9 +350,16 @@ namespace buoi6.Controllers
         }
         public async Task<IActionResult> InvoiceDetail(int id)
         {
+
             if (HttpContext.Request.Cookies.ContainsKey("AccountFullname"))
             {
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
+                ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+
+                int AccountID = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == AccountID).FirstOrDefault();
+
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
                 var eshopContext = _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product).Where(i=>i.InvoiceId==id);
                 return View(await eshopContext.ToListAsync());
             }
@@ -314,14 +373,15 @@ namespace buoi6.Controllers
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
                 id = Int32.Parse(ViewBag.AccountID);
+                Account account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
 
+                if (account.IsAdmin) return RedirectToAction("Index", "Admin");
                 if (id == -1)
                 {
                     return NotFound();
                 }
 
-                var account = await _context.Account
-                    .FirstOrDefaultAsync(m => m.Id == id);
+                
                 if (account == null)
                 {
                     return NotFound();

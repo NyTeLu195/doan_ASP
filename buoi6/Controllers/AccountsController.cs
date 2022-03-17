@@ -77,6 +77,7 @@ namespace buoi6.Controllers
                 ViewBag.AccountImage = HttpContext.Request.Cookies["AccountImage"].ToString();
                 ViewBag.AccountUsername = HttpContext.Request.Cookies["AccountFullname"].ToString();
                 ViewBag.AccountID = HttpContext.Request.Cookies["AccountID"].ToString();
+                
             }
             var byEmail = (from acc in _context.Account
                              where acc.Email.Contains("Gmail")
@@ -281,7 +282,7 @@ namespace buoi6.Controllers
                     HttpContext.Response.Cookies.Append("AccountUsername", account.Username.ToString());
                     HttpContext.Response.Cookies.Append("AccountFullname", account.FullName.ToString());
                     HttpContext.Response.Cookies.Append("AccountImage", account.Avatar.ToString());
-
+                    HttpContext.Response.Cookies.Append("AccountAdmin", account.IsAdmin.ToString());
                     if ( account.IsAdmin)
                     {
                         return RedirectToAction("Index", "Admin");
